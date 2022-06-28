@@ -27,7 +27,8 @@ class App extends Component {
       .post('http://10.0.2.2:4000/car/enginStatusReq',
         {
           carid: '09e7b07a-eeb6-11ec-acf2-acde48001122',
-          engin_status: "START_REQ"
+          engin_status: "START_REQ",
+          type: "APP"
         }
       )
       .then(({ data }) => {
@@ -38,9 +39,6 @@ class App extends Component {
       })
       .catch(e => {
         console.error(e);
-        this.setState({
-          enginStatus: 'STOP'
-        })
         alert("Fail Engin Start Request.")
       })
   }
@@ -50,9 +48,10 @@ class App extends Component {
       .post('http://10.0.2.2:4000/car/enginStatusReq',
         {
           carid: '09e7b07a-eeb6-11ec-acf2-acde48001122',
-          engin_status: "STOP_REQ"
+          engin_status: "STOP_REQ",
+          type: "APP"
         }
-      )
+      ) 
       .then(({ data }) => {
         this.setState({
           enginStatus: 'STOP_REQ'
@@ -61,9 +60,6 @@ class App extends Component {
       })
       .catch(e => {
         console.error(e);
-        this.setState({
-          enginStatus: 'STOP'
-        })
         alert("Fail Engin Start Request.")
       })
   }
@@ -72,25 +68,21 @@ class App extends Component {
     axios
       .post('http://10.0.2.2:4000/car/enginStatus',
         {
-          carid: '09e7b07a-eeb6-11ec-acf2-acde48001122',
-          engin_status: "STOP_REQ"
+          carid: '09e7b07a-eeb6-11ec-acf2-acde48001122'
         }
       )
       .then(({ data }) => {
-        this.setState({
-          enginStatus: 'STOP_REQ'
-        })
-        if(data.status == "STOP" || data.status.replace("_REQ", "") == "START"){
+        if(data.status == 'STOP' || data.status == "START_REQ"){
+          this.setState({ enginStatus: 'STOP' })
           alert("Current Engin Status : STOP")
-        }else if(data.status == "START" || data.status.replace("_REQ", "") == "STOP"){
+        }else if(data.status == "START" || data.status == "STOP_REQ "){
+          this.setState({ enginStatus: 'START' })
           alert("Current Engin Status : START")
         }
+        
       })
       .catch(e => {
         console.error(e);
-        this.setState({
-          enginStatus: 'STOP'
-        })
         alert("Fail Engin Start Request.")
       })
   }
@@ -99,6 +91,9 @@ class App extends Component {
     return (
       <View style={styles.mainView}>
         <Header name={this.state.appName}/>
+        <View style={styles.subView}>
+          <Text style={styles.Text}>Hello</Text>
+        </View>
         <View style={styles.button}>
           <Button
               title="Engin Start"
@@ -111,7 +106,7 @@ class App extends Component {
           />
           <Separator />
           <Button
-              title="Engin Status"
+              title="Engin Status2"
               onPress={() => this.getEnginStatus()}
           />
         </View>
